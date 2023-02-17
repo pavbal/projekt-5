@@ -2,12 +2,13 @@ import os
 
 import skimage
 from skimage.feature import local_binary_pattern
-from sklearn import datasets
+#from sklearn import datasets
 import numpy as np
-import sklearn.model_selection
-from sklearn import svm
-import sklearn.naive_bayes
-import matplotlib.pyplot as plt
+
+# import sklearn.model_selection
+# from sklearn import svm
+# import sklearn.naive_bayes
+# import matplotlib.pyplot as plt
 
 
 radius = 1
@@ -42,7 +43,7 @@ data_rgb = np.squeeze(np.reshape(im_lbp_rgb, (1024*1024, -1, 3)))
 print(data_rgb.shape)
 
 
-folder_dir_base = "C:/Users/pavba/PycharmProjects/projekt_5/LoveDA_Train_16/"
+folder_dir_base = "C:/Users/pavba/PycharmProjects/projekt-5/LoveDA_Train_16/"
 folder_dir_base = "./LoveDA_Train_16/"
 dataset_lbp = np.zeros((1024*1024*number_images, dim), dtype=int)
 mask_vect = np.zeros((1024*1024*number_images, 1), dtype=int)
