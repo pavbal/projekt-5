@@ -78,6 +78,7 @@ for folder_level_1 in os.listdir(folder_dir_base):
                         dataset_lbp[global_counter, 2] = lbp[x, y] * 2
                     mask_vect[global_counter, 0] = im_m[x,y]
                     global_counter += 1
-    print(dataset_lbp.shape)
+    print("dataset shape: ",dataset_lbp.shape)
+    print("mask_vect shape: ", mask_vect.shape)
     np.save('./saved/dataset_rgb', dataset_lbp)
     np.save('./saved/mask_vect_rgb', mask_vect)
