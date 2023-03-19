@@ -9,13 +9,16 @@ import os
 
 # Konstanta (velikost bunky)
 CELL_C = 32
+CELL_C = 16
 # ostatni konstanty
 HOG_ORIENT = 9
 NUMBER_IMAGES = 16
+NUMBER_IMAGES = 2522 # celý dataset
 IMAGE_LEN = 1024
 test_img_number = 23
 # cesta
 folder_dir_base = "./LoveDA_Train_16/"
+folder_dir_base = "./LoveDA/Train/" # celý dataset
 
 global_counter_img = 0
 
@@ -32,8 +35,10 @@ for folder_level_1 in os.listdir(folder_dir_base):
 
     for image in os.listdir(folder_dir_2):
         # ziskani obrazku a jeho masky
-        file_name_image = "LoveDA_Train_16/" + folder_level_1 + "/images_png/" + image
-        file_name_mask = "LoveDA_Train_16/" + folder_level_1 + "/masks_png/" + image
+        # file_name_image = "LoveDA_Train_16/" + folder_level_1 + "/images_png/" + image
+        # file_name_mask = "LoveDA_Train_16/" + folder_level_1 + "/masks_png/" + image
+        file_name_image = folder_dir_base + folder_level_1 + "/images_png/" + image # celý dataset
+        file_name_mask = folder_dir_base + folder_level_1 + "/masks_png/" + image # celý dataset
         img = skimage.io.imread(file_name_image)
         mask = skimage.io.imread(file_name_mask)
 
@@ -60,6 +65,7 @@ for folder_level_1 in os.listdir(folder_dir_base):
         mask_vect[mez1:mez2] = mask_hog_flatten
 
         # vytvareni datasetu
+        # fv = np.zeros(1024, 1024, 3)
         fv = hog(img, orientations=HOG_ORIENT, pixels_per_cell=(CELL_C, CELL_C), cells_per_block=(1, 1),
                  visualize=False, channel_axis=2)
         fv = np.reshape(fv, (len(mask_hog_flatten), HOG_ORIENT))
@@ -67,10 +73,18 @@ for folder_level_1 in os.listdir(folder_dir_base):
 
         global_counter_img += 1
 
+for i in range(0, len(mask_vect)):
+    if mask_vect[i] == 0:
+        mask_vect = np.delete(mask_vect, i, 0)
+        dataset_hog = np.delete(dataset_hog, i, 0)
+
+
 print("dataset shape: ", dataset_hog.shape)
 print("mask_vect shape: ", mask_vect.shape)
-np.save('./saved/dataset_hog', dataset_hog)
-np.save('./saved/mask_vect_hog', mask_vect)
+# np.save('./saved/dataset_hog', dataset_hog)
+# np.save('./saved/mask_vect_hog', mask_vect)
+np.save('./saved/dataset_hog_all', dataset_hog) # celý dataset
+np.save('./saved/mask_vect_hog_all', mask_vect) # celý dataset
 
 ## testovaci prvek
 

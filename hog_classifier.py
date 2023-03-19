@@ -10,9 +10,12 @@ import matplotlib.pyplot as plt
 # trenovaci data
 data_matrix = np.load('./saved/dataset_hog.npy')
 target_vect = np.ravel(np.load('./saved/mask_vect_hog.npy'))
+data_matrix = np.load('./saved/dataset_hog_all.npy') # celý dataset
+target_vect = np.ravel(np.load('./saved/mask_vect_hog_all.npy')) # celý dataset
 
 HOG_ORIENT = len(data_matrix[1,:])
 CELL_C = 32
+CELL_C = 16
 IMAGE_LEN = 1024
 dim = 9
 test_img_number = 23
@@ -42,7 +45,7 @@ print(gnb.n_features_in_)
 
 # VMS
 # max_iter=10
-svc = svm.SVC(max_iter=3)
+svc = svm.SVC(max_iter=10)
 svc.fit(data_matrix, target_vect)
 print(svc.n_features_in_)
 
@@ -52,7 +55,7 @@ test_target = np.zeros((1024*1024, 1), dtype=int)
 
 
 
-# y_pred = gnb.predict(test_data).reshape(-1, 1) # bayes
+# y_pred = gnb.predict(test_img_data).reshape(-1, 1) # bayes
 y_pred = svc.predict(test_img_data).reshape(-1, 1)  # SVM
 
 print("y_pred shape: ", y_pred.shape)
