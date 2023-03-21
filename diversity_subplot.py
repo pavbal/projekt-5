@@ -24,6 +24,7 @@ def plot_barchart_2_subplot(pole, envir, count, group):
     plt.subplot(1, 3, count)
     plt.bar(classes_numpy, performance, align='center', alpha=0.5)
     plt.xticks(classes_numpy, classes)
+    fig.tight_layout(pad=1, w_pad=1)
     if(count == 1):
         plt.ylabel('Počet obrázků')
 
@@ -38,16 +39,18 @@ def plot_barchart_2_subplot(pole, envir, count, group):
 
 
 folder_dir = "C:/Users/pavba/PycharmProjects/projekt_5/LoveDA/Train/Rural/images_png"
-group = "Val"
-folder_dir_base = "C:/Users/pavba/PycharmProjects/projekt_5/LoveDA/" + group + "/"
+group = "Train"
+folder_dir_base = "C:/Users/pavba/PycharmProjects/projekt-5/LoveDA/" + group + "/"
 
 diverse_classes_global = np.zeros((1366 + 1156,), dtype=int)
 global_counter = 0
 
-fig = plt.figure(figsize=(11, 6))
+figsize = (11, 3)
+
+fig = plt.figure(figsize=figsize)
 fig.suptitle('Počety tříd na jednotlivých obrázcích - '+group, fontsize=14)
-fig.text(.5, .05,'Počet tříd', ha='center')
-fig.tight_layout(pad=5.0)
+fig.text(.5, .01,'Počet tříd', ha='center')
+fig.tight_layout(pad=1, w_pad=1, rect=(10,1))
 
 for folder_level_1 in os.listdir(folder_dir_base):
     folder_dir_1 = folder_dir_base + folder_level_1 + "/"
@@ -81,9 +84,9 @@ for folder_level_1 in os.listdir(folder_dir_base):
 diverse_images_global = np.add(diverse_images, diverse_images_copy)
 plot_barchart_2_subplot(diverse_images_global, 'global', 3, group)
 
-plt.savefig('barchart_subplots/barchart_subplot_diverse_'+group+'.png', bbox_inches='tight')
+plt.savefig('barchart_subplots/barchart_subplot_diverse_'+group+'.png')#, bbox_inches='tight')
 diverse_arrays_arrays = (np.rint(diverse_arrays)).astype(int)
-np.savetxt("csv/diverse_arrays_"+group+".csv", diverse_arrays, delimiter=",")
+# np.savetxt("csv/diverse_arrays_"+group+".csv", diverse_arrays, delimiter=",")
 
 ##diverse_images_global = np.zeros((8,), dtype=int)
 # diverse_images_global = [np.sum(diverse_classes_global == 1), np.sum(diverse_classes_global == 2),

@@ -6,6 +6,7 @@ import sklearn.model_selection
 from sklearn import svm
 import sklearn.naive_bayes
 import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap
 
 data_matrix = np.load('./saved/dataset_rgb_1im.npy')
 target_vect = np.ravel(np.load('./saved/mask_vect_rgb_1im.npy'))
@@ -79,6 +80,11 @@ y_pred_img = np.reshape(y_pred, (1024, 1024))
 # Vykresleni---------------------------------------------------------------------
 
 cmap1 = plt.cm.gray
+
+
+num_classes = 8
+colors = ['#000000', '#666666', '#d22d04', '#ff6bfd', '#0575e6', "#994200", "#1a8f00", "#ffd724"]
+myCmap = ListedColormap(colors)
 
 fig, (ax1, ax2, ax3, ax4) = plt.subplots(1, 4, figsize=(16, 5), sharex=True, sharey=True)
 # fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(16, 5), sharex=True, sharey=True)

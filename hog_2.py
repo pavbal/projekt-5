@@ -15,7 +15,7 @@ HOG_ORIENT = 9
 NUMBER_IMAGES = 16
 NUMBER_IMAGES = 2522 # celý dataset
 IMAGE_LEN = 1024
-test_img_number = 23
+test_img_number = 25
 # cesta
 folder_dir_base = "./LoveDA_Train_16/"
 folder_dir_base = "./LoveDA/Train/" # celý dataset
@@ -73,10 +73,19 @@ for folder_level_1 in os.listdir(folder_dir_base):
 
         global_counter_img += 1
 
-for i in range(0, len(mask_vect)):
-    if mask_vect[i] == 0:
-        mask_vect = np.delete(mask_vect, i, 0)
-        dataset_hog = np.delete(dataset_hog, i, 0)
+
+mode_is_zero = mask_vect==0
+mode_isnot_zero = mask_vect!=0
+np.save('./saved/mode_isnot_zero', mode_isnot_zero)
+dataset_hog = dataset_hog[np.reshape(mode_isnot_zero, (len(mode_isnot_zero), )), 0:HOG_ORIENT]
+mask_vect = mask_vect[mode_isnot_zero]
+
+# dataset_hog = dataset_hog[mode_isnot_zero[:,0], 0:HOG_ORIENT]
+
+# for i in range(0, len(mask_vect)): #neefektivní, upravit!
+#     if mask_vect[i] == 0:
+#         mask_vect = np.delete(mask_vect, i, 0)
+#         dataset_hog = np.delete(dataset_hog, i, 0)
 
 
 print("dataset shape: ", dataset_hog.shape)

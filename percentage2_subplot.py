@@ -34,9 +34,11 @@ def plot_barchart_subplot(pole, envir, count, group):
 
     #plt.figure(figsize=(8.5, 6))
     plt.subplot(1, 3, count)
+    fig.tight_layout(pad=1, w_pad=1)
 
     plt.bar(classes_numpy, performance, align='center', alpha=0.5)
     plt.xticks(classes_numpy, classes)
+
     if (count == 1):
         plt.ylabel('Procento pixelů')
     if envir == "Rural":
@@ -50,17 +52,21 @@ def plot_barchart_subplot(pole, envir, count, group):
 
 
 folder_dir = "C:/Users/pavba/PycharmProjects/projekt_5/LoveDA/Train/Rural/images_png"
-group = "Train"
-folder_dir_base = "C:/Users/pavba/PycharmProjects/projekt_5/LoveDA/" + group + "/"
+group = "Val"
+folder_dir_base = "C:/Users/pavba/PycharmProjects/projekt-5/LoveDA/" + group + "/"
 
 
 global_counter = 0
 plot_counter = 1
 
-fig = plt.figure(figsize=(11, 6))
-fig.suptitle('Procentuální podíl jednotlivých tříd - '+group, fontsize=14)
-fig.text(.5, .05,'TŘÍDY: '+ txt_cz, ha='center')
-fig.tight_layout(pad=8.0)
+figsize = (11, 6)
+figsize = (11, 3)
+
+fig = plt.figure(figsize=figsize)
+fig.suptitle('Procentuální podíl jednotlivých tříd - '+group, fontsize=14, )
+fig.text(.5, .01,'TŘÍDY: '+ txt_cz, ha='center')
+fig.tight_layout(pad=1, w_pad=1, rect=(10,1))
+# fig.tight_layout(pad=1.08, h_pad=None, w_pad=None, )
 
 for folder_level_1 in os.listdir(folder_dir_base):
     folder_dir_1 = folder_dir_base + folder_level_1 + "/"
@@ -104,9 +110,10 @@ plot_barchart_subplot(np.array(global_percent), "global", 3, group)
 # plot_barchart_subplot(pixels_classes_percentage_copy, "Urban", 2)
 
 
-plt.savefig('barchart_subplots/barchart_subplot_percent_'+group+'.png', bbox_inches='tight')
+# plt.savefig('barchart_subplots/barchart_subplot_percent_'+group+'1.png', bbox_inches='tight')
+plt.savefig('barchart_subplots/barchart_subplot_percent_'+group+'.png')#, bbox_inches='tight')
 occur_percent = (np.rint(percent_arrays)).astype(int)
-np.savetxt("csv/percent_arrays_"+group+".csv", percent_arrays, delimiter=",")
+# np.savetxt("csv/percent_arrays_"+group+".csv", percent_arrays, delimiter=",")
 
 print(pixels_classes_percentage)
 print(pixels_classes_percentage_copy)

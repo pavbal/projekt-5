@@ -26,6 +26,7 @@ def plot_barchart_3_subplot(pole, envir, count, group):
     plt.subplot(1, 3, count)
     plt.bar(classes_numpy, performance, align='center', alpha=0.5)
     plt.xticks(classes_numpy, classes)
+    fig.tight_layout(pad=1, w_pad=1)
     if (count == 1):
         plt.ylabel('Procento obrázků')
         # plt.ylabel('Počet obrázků')
@@ -39,17 +40,19 @@ def plot_barchart_3_subplot(pole, envir, count, group):
         plt.title("Městské a venkovské oblasti")
 
 
-folder_dir = "C:/Users/pavba/PycharmProjects/projekt_5/LoveDA/Train/Rural/images_png"
-group = "Val"
-folder_dir_base = "C:/Users/pavba/PycharmProjects/projekt_5/LoveDA/" + group + "/"
+folder_dir = "C:/Users/pavba/PycharmProjects/projekt-5/LoveDA/Train/Rural/images_png"
+group = "Train"
+folder_dir_base = "C:/Users/pavba/PycharmProjects/projekt-5/LoveDA/" + group + "/"
 
 global_counter = 0
 plot_counter = 1
 
-fig = plt.figure(figsize=(11, 6))
+figsize = (11, 3)
+
+fig = plt.figure(figsize=figsize)
 fig.suptitle('Počty obrázků s výskytem jednotlivých tříd - '+group, fontsize=14)
-fig.text(.5, .05,'TŘÍDY: '+ txt_cz, ha='center')
-fig.tight_layout(pad=8.0)
+fig.text(.5, .01,'TŘÍDY: '+ txt_cz, ha='center')
+fig.tight_layout(pad=1, w_pad=1, rect=(10,1))
 
 for folder_level_1 in os.listdir(folder_dir_base):
     folder_dir_1 = folder_dir_base + folder_level_1 + "/"
@@ -82,9 +85,9 @@ for folder_level_1 in os.listdir(folder_dir_base):
 plot_barchart_3_subplot(np.add(class_occur, class_occur_copy)/(image_count+image_count1)*100, 'global', 3, group)
 
 
-plt.savefig('barchart_subplots/barchart_subplot_occur_'+group+'_p.png', bbox_inches='tight')
+plt.savefig('barchart_subplots/barchart_subplot_occur_'+group+'_p.png')#, bbox_inches='tight')
 occur_arrays = (np.rint(occur_arrays)).astype(int)
-np.savetxt("csv/occur_arrays_"+group+".csv", occur_arrays, delimiter=",")
+# np.savetxt("csv/occur_arrays_"+group+".csv", occur_arrays, delimiter=",")
 
 # diverse_images_global = np.zeros((8,), dtype=int)
 # diverse_images_global = [np.sum(diverse_classes_global == 1), np.sum(diverse_classes_global == 2),
