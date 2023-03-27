@@ -13,9 +13,9 @@ CELL_C = 16
 # ostatni konstanty
 HOG_ORIENT = 9
 NUMBER_IMAGES = 16
-NUMBER_IMAGES = 2522 # celý dataset
+NUMBER_IMAGES = 2522 # celý dataset TRAIN
 IMAGE_LEN = 1024
-test_img_number = 25
+test_img_number = 3200
 # cesta
 folder_dir_base = "./LoveDA_Train_16/"
 folder_dir_base = "./LoveDA/Train/" # celý dataset
@@ -74,7 +74,6 @@ for folder_level_1 in os.listdir(folder_dir_base):
         global_counter_img += 1
 
 
-mode_is_zero = mask_vect==0
 mode_isnot_zero = mask_vect!=0
 np.save('./saved/mode_isnot_zero', mode_isnot_zero)
 dataset_hog = dataset_hog[np.reshape(mode_isnot_zero, (len(mode_isnot_zero), )), 0:HOG_ORIENT]
@@ -97,8 +96,8 @@ np.save('./saved/mask_vect_hog_all', mask_vect) # celý dataset
 
 ## testovaci prvek
 
-img = skimage.io.imread("./LoveDA_Test_16/Rural/images_png/" + str(test_img_number) + ".png")
-mask = skimage.io.imread("./LoveDA_Test_16/Rural/masks_png/" + str(test_img_number) + ".png")
+img = skimage.io.imread("./LoveDA/Val/Rural/images_png/" + str(test_img_number) + ".png")
+mask = skimage.io.imread("./LoveDA/Val/Rural/masks_png/" + str(test_img_number) + ".png")
 
 # uprava testovaci masky pro hog
 scale_mask = int(len(mask) / CELL_C)
