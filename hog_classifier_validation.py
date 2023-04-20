@@ -14,10 +14,10 @@ from matplotlib.colors import ListedColormap, BoundaryNorm
 # trenovaci data
 data_matrix = np.load('./saved/dataset_hog.npy')
 target_vect = np.ravel(np.load('./saved/mask_vect_hog.npy'))
-data_matrix = np.load('./saved/dataset_hog_all.npy') # celý dataset
-target_vect = np.ravel(np.load('./saved/mask_vect_hog_all.npy')) # celý dataset
+data_matrix = np.load('./saved/dataset_hog_all.npy')  # celý dataset
+target_vect = np.ravel(np.load('./saved/mask_vect_hog_all.npy'))  # celý dataset
 
-NUMBER_IMAGES_VAL = 1669 # celý dataset TRAIN
+NUMBER_IMAGES_VAL = 1669  # celý dataset TRAIN
 HOG_ORIENT = len(data_matrix[1,:])
 CELL_C = 32
 CELL_C = 16
@@ -60,11 +60,11 @@ hog_scale = int(IMAGE_LEN/CELL_C)
 dataset_hog_val = np.zeros((hog_scale*hog_scale*NUMBER_IMAGES_VAL, HOG_ORIENT), dtype=float)
 mask_vect_val = np.zeros((hog_scale*hog_scale*NUMBER_IMAGES_VAL, 1), dtype=int)
 
-for folder_level_1 in os.listdir(folder_dir_base):
+for folder_level_1 in sorted(os.listdir(folder_dir_base), key=len):
     folder_dir_1 = folder_dir_base + folder_level_1 + "/"
     folder_dir_2 = folder_dir_1 + "images_png" + "/"
 
-    for image in os.listdir(folder_dir_2):
+    for image in sorted(os.listdir(folder_dir_2), key=len):
         # ziskani obrazku a jeho masky
         file_name_image = folder_dir_base + folder_level_1 + "/images_png/" + image # celý dataset
         file_name_mask = folder_dir_base + folder_level_1 + "/masks_png/" + image # celý dataset
@@ -116,7 +116,7 @@ y_pred = y_pred.reshape(-1)
 mask_vect_val = mask_vect_val.reshape(-1)
 
 print("Number of mislabeled points: ", np.sum(mask_vect_val != y_pred))
-print("percentage: ", np.divide(np.sum(mask_vect_val != y_pred), len(y_pred)))
+print("Podíl správné klasifikace: ", np.divide(np.sum(mask_vect_val != y_pred), len(y_pred)))
 print("y_pred len: ", np.shape(y_pred))
 print("mask_vect_val: ", np.shape(mask_vect_val))
 print("dataset_hog_val: ", np.shape(dataset_hog_val))
