@@ -14,7 +14,7 @@ import numpy as np
 radius = 1
 n_points = 8 * radius
 METHOD = 'uniform'
-number_images = 16
+number_images = 1
 
 dim = 3
 
@@ -50,35 +50,29 @@ mask_vect = np.zeros((1024*1024*number_images, 1), dtype=int)
 global_counter = 0
 print(dataset_lbp.shape)
 
-for folder_level_1 in os.listdir(folder_dir_base):
-    folder_dir_1 = folder_dir_base + folder_level_1 + "/"
+file_name_image = "./LoveDA_Train_16/Rural/images_png/6.png"
+file_name_mask = "./LoveDA_Train_16/Rural/masks_png/6.png"
+im_i = skimage.io.imread(file_name_image)
+im_i_g = skimage.color.rgb2gray(im_i)
+im_m = skimage.io.imread(file_name_mask)
 
-    folder_dir_2 = folder_dir_1 + "images_png" + "/"
-
-
-    file_name_image = "LoveDA_Train_16/" + folder_level_1 + "/images_png/" + "6.png"
-    file_name_mask = "LoveDA_Train_16/" + folder_level_1 + "/masks_png/" + "6.png"
-    im_i = skimage.io.imread(file_name_image)
-    im_i_g = skimage.color.rgb2gray(im_i)
-    im_m = skimage.io.imread(file_name_mask)
-
-    lbp = local_binary_pattern(im_i_g, n_points, radius, METHOD)
-    im_lbp_rgb = im_i
-    im_lbp_rgb[:, :, 0] = local_binary_pattern(im_i[:, :, 0], n_points, radius, METHOD)
-    im_lbp_rgb[:, :, 1] = local_binary_pattern(im_i[:, :, 1], n_points, radius, METHOD)
-    im_lbp_rgb[:, :, 2] = local_binary_pattern(im_i[:, :, 2], n_points, radius, METHOD)
+lbp = local_binary_pattern(im_i_g, n_points, radius, METHOD)
+im_lbp_rgb = im_i
+im_lbp_rgb[:, :, 0] = local_binary_pattern(im_i[:, :, 0], n_points, radius, METHOD)
+im_lbp_rgb[:, :, 1] = local_binary_pattern(im_i[:, :, 1], n_points, radius, METHOD)
+im_lbp_rgb[:, :, 2] = local_binary_pattern(im_i[:, :, 2], n_points, radius, METHOD)
 
 
-    for x in range(np.size(im_m, 0)):
-        for y in range(np.size(im_m, 1)):
-            if im_m[x,y] != 0:
-                dataset_lbp[global_counter, 0] = im_lbp_rgb[x,y,0]
-                dataset_lbp[global_counter, 1] = im_lbp_rgb[x,y,1]
-                dataset_lbp[global_counter, 2] = im_lbp_rgb[x,y,2]
-                if dim == 4:
-                    dataset_lbp[global_counter, 2] = lbp[x, y] * 2
-                mask_vect[global_counter, 0] = im_m[x,y]
-                global_counter += 1
-    print(dataset_lbp.shape)
-    np.save('./saved/dataset_rgb_1im', dataset_lbp)
-    np.save('./saved/mask_vect_rgb_1im', mask_vect)
+for x in range(np.size(im_m, 0)):
+    for y in range(np.size(im_m, 1)):
+        if im_m[x,y] != 0:
+            dataset_lbp[global_counter, 0] = im_lbp_rgb[x,y,0]
+            dataset_lbp[global_counter, 1] = im_lbp_rgb[x,y,1]
+            dataset_lbp[global_counter, 2] = im_lbp_rgb[x,y,2]
+            if dim == 4:
+                dataset_lbp[global_counter, 2] = lbp[x, y] * 2
+            mask_vect[global_counter, 0] = im_m[x,y]
+            global_counter += 1
+print(dataset_lbp.shape)
+np.save('./saved/dataset_rgb_1im', dataset_lbp)
+np.save('./saved/mask_vect_rgb_1im', mask_vect)

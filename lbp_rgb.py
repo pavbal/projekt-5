@@ -58,6 +58,7 @@ for folder_level_1 in os.listdir(folder_dir_base):
         file_name_image = "LoveDA_Train_16/" + folder_level_1 + "/images_png/" + image
         file_name_mask = "LoveDA_Train_16/" + folder_level_1 + "/masks_png/" + image
         im_i = skimage.io.imread(file_name_image)
+        # im_i = im_i-128
         im_i_g = skimage.color.rgb2gray(im_i)
         im_m = skimage.io.imread(file_name_mask)
 

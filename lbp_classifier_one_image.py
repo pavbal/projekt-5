@@ -7,6 +7,7 @@ from sklearn import svm
 import sklearn.naive_bayes
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
+from methods.methods import plot_two_with_map, compute_iou
 
 data_matrix = np.load('./saved/dataset_rgb_1im.npy')
 target_vect = np.ravel(np.load('./saved/mask_vect_rgb_1im.npy'))
@@ -25,17 +26,17 @@ radius = 1
 n_points = 8 * radius
 METHOD = 'uniform'
 global_counter = 0
+max_iter = 5
 
 # bayes
-gnb = sklearn.naive_bayes.GaussianNB(priors=None)
-gnb.fit(data_matrix, target_vect)
-print(gnb.n_features_in_)
+# gnb = sklearn.naive_bayes.GaussianNB(priors=None)
+# gnb.fit(data_matrix, target_vect)
+# print(gnb.n_features_in_)
 
-# VMS
-# max_iter=10
-svc = svm.SVC(max_iter=4)
+# SC
+svc = svm.SVC(max_iter=max_iter)
 svc.fit(data_matrix, target_vect)
-print(svc.n_features_in_)
+# print(svc.n_features_in_)
 
 im_i = skimage.io.imread("./LoveDA_Train_16/Rural/images_png/6.png")
 im_i_g = skimage.color.rgb2gray(im_i)
@@ -73,40 +74,27 @@ y_pred = svc.predict(test_data).reshape(-1, 1)  # SVM
 # print("Number of mislabeled points : %d" % np.sum(test_target != y_pred))
 # print(test_target != y_pred)
 print("Number of mislabeled points : %d" % np.sum(test_target != y_pred))
+print("Percentage correct: ", (np.sum(test_target == y_pred)/(1024*1024)))
+# print("IoU: ", compute_iou(y_pred, test_target))
 # test_data_img = np.reshape(skimage.color.rgb2gray(test_data), (1024, 1024))
 # test_data_img = np.reshape(test_data[:,1], (1024, 1024))
 y_pred_img = np.reshape(y_pred, (1024, 1024))
+print("IoU: ", compute_iou(y_pred_img, im_m))
 
 # Vykresleni---------------------------------------------------------------------
 
-cmap1 = plt.cm.gray
+start_y = 300
+dest_y = start_y + 128
+start_x = 650
+dest_x = start_x + 128
 
+plot_two_with_map(im_m, y_pred_img, im_i=im_i,
+                  title="Predikce metody LBP (RGB) na tomtéž snímku - SVM",
+                  save_name="./figures/LBP_rgb_1img_SVM-5iter_1024_correct.png")
+plot_two_with_map(im_m[start_x:dest_x, start_y:dest_y], y_pred_img[start_x:dest_x, start_y:dest_y], im_i=im_i[start_x:dest_x, start_y:dest_y],
+                  title="Predikce metody LBP (RGB) na tomtéž snímku - SVM, výřez",
+                  save_name="./figures/LBP_rgb_1img_SVM-5iter_128_correct.png")
 
-num_classes = 8
-colors = ['#000000', '#666666', '#d22d04', '#ff6bfd', '#0575e6', "#994200", "#1a8f00", "#ffd724"]
-myCmap = ListedColormap(colors)
+# plt.savefig("test_fig.png",bbox_inches='tight')
 
-fig, (ax1, ax2, ax3, ax4) = plt.subplots(1, 4, figsize=(16, 5), sharex=True, sharey=True)
-# fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(16, 5), sharex=True, sharey=True)
-ax1.axis('off')
-ax1.imshow(im_i, cmap=plt.cm.gray)
-ax1.set_title('Input image')
-
-ax2.axis('off')
-ax2.imshow(im_m)#, cmap=plt.cm.gray)
-ax2.set_title('Mask')
-
-im_hybrid = np.hstack((im_m, y_pred_img))
-
-ax3.axis('off')
-ax3.imshow(lbp, cmap=plt.cm.gray)
-ax3.set_title('LBP')
-
-ax4.axis('off')
-ax4.imshow(y_pred_img)#, cmap=plt.cm.gray)
-ax4.set_title('Predicted')
-
-
-
-plt.show()
 

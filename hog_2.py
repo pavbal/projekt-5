@@ -15,7 +15,7 @@ HOG_ORIENT = 9
 NUMBER_IMAGES = 16
 NUMBER_IMAGES = 2522 # celý dataset TRAIN
 IMAGE_LEN = 1024
-test_img_number = 3200
+test_img_number = 3547
 # cesta
 SET = "Train"
 folder_dir_base = "./LoveDA_Train_16/"
